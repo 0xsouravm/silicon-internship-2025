@@ -1,3 +1,5 @@
+// --------------------------------------- In Class codebase ------------------------------------------- //
+
 const PI: f32 = 3.14159; // Constant value of PI
 
 fn main() {
@@ -21,39 +23,6 @@ fn main() {
     // // Type Inference
     // let c = -1;
     // let c = -1.968;
-
-    // // Floats
-    // let floating_num = 3.14;
-    // // println!("floating_num: {}", floating_num);
-
-    // let f1: f32 = 0.1;
-    // let f2: f32 = 0.2;
-    // let f3: f64 = (f1 + f2).into();
-    // // println!("f3: {}", f3);
-
-    // // Booleans
-    // let is_true = true;
-    // let is_false = false;
-
-    // // println!("is_true: {}, is_false: {}", !is_true, !is_false);
-
-    // // Characters
-    // let char_a = 'A';
-    // // println!("char_a: {}", char_a);
-
-    // let char_n = 'ñ';
-    // // println!("char_a: {}", char_n);
-
-    // let emoji = '😊';
-    // // println!("emoji: {}", emoji);
-
-    // let char_a_bytes = "A".as_bytes();
-    // let char_n_bytes = "ñ".as_bytes();
-    // let emoji_bytes = "😊".as_bytes();
-
-    // println!("Char a bytes: {:?}", char_a_bytes);
-    // println!("Char n bytes: {:?}", char_n_bytes);
-    // println!("Emoji bytes: {:?}", emoji_bytes);
 
     // Mutability
     // let x = 100;
@@ -111,6 +80,7 @@ fn homework() {
 
     // cargo run --bin variables
 }
+// --------------------------------------- In Class codebase ------------------------------------------- //
 
 fn datatypes() {
     //  divideed into 2 types : 1. scalar 2. compound (group of multiple values)
@@ -124,7 +94,58 @@ fn datatypes() {
     // aarrays are often compared with vectors due to the capabilities of vectors to grow and shrink in size, while arrays have a fixed size. 
     // arrays are allocated on stack and the vvery reason of using it is becus of allocation speed which is faster than heap allocated vectors.
 
+    // --------------------------------------- In Class codebase ------------------------------------------- //
 
+    // // Floats
+    // let floating_num = 3.14;
+    // // println!("floating_num: {}", floating_num);
+
+    // let f1: f32 = 0.1;
+    // let f2: f32 = 0.2;
+    // let f3: f64 = (f1 + f2).into();
+    // // println!("f3: {}", f3);
+
+    // // Booleans
+    // let is_true = true;
+    // let is_false = false;
+
+    // // println!("is_true: {}, is_false: {}", !is_true, !is_false);
+
+    // // Characters
+    // let char_a = 'A';
+    // // println!("char_a: {}", char_a);
+
+    // let char_n = 'ñ';
+    // // println!("char_a: {}", char_n);
+
+    // let emoji = '😊';
+    // // println!("emoji: {}", emoji);
+
+    // let char_a_bytes = "A".as_bytes();
+    // let char_n_bytes = "ñ".as_bytes();
+    // let emoji_bytes = "😊".as_bytes();
+
+    // println!("Char a bytes: {:?}", char_a_bytes);
+    // println!("Char n bytes: {:?}", char_n_bytes);
+    // println!("Emoji bytes: {:?}", emoji_bytes);
+
+    // --------------------------------------- In Class codebase ------------------------------------------- //
+
+    //  Examples : Tuples
+    // let tuple1 = (1, 2, 3);
+    // let tuple2 = (1, 2.0, "hello sir");
+    // let tuple3 = (1, 2.0, "hello sir", true);
+    // let tuple4 = (1, 2.0, "hello sir", true, 'A');
+
+    // println!("tuple1: {:?}", tuple1);
+    // println!("tuple2: {:?}", tuple2);
+    // println!("tuple3: {:?}", tuple3);
+    // println!("tuple4: {:?}", tuple4);
+
+    // Examples : Arrays
+    // let array1 = [1, 2, 3];
+    // let array2 = [1, 2, 3, 4, 5];
+    // let array3 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 
 }
