@@ -1,6 +1,11 @@
 const PI: f32 = 3.14159; // Constant value of PI
 
 fn main() {
+    datatypes();
+    homework();
+
+    // Variables in Rust
+
     // // let variable_name: type = "value";
     
     // // i8
@@ -105,4 +110,21 @@ fn homework() {
     // Type Casting
 
     // cargo run --bin variables
+}
+
+fn datatypes() {
+    //  divideed into 2 types : 1. scalar 2. compound (group of multiple values)
+    // scalar represents single value 
+    // most used 4 types : Integers, floats, booleans, characters
+
+    // ** in flaots f32 and f64 got the same speed in most cases, but f64 is more precise (class 4 maths :/)
+    
+    // compound types : tuples, arrays
+
+    // aarrays are often compared with vectors due to the capabilities of vectors to grow and shrink in size, while arrays have a fixed size. 
+    // arrays are allocated on stack and the vvery reason of using it is becus of allocation speed which is faster than heap allocated vectors.
+
+
+
+
 }
