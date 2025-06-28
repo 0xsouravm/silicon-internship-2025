@@ -91,7 +91,7 @@
 * Mempool Management & Fees
 * Implement transaction processing logic
 
-### P2P Networking - **S**
+### P2P Networking - **M**
 * Peer Discovery & Network Topology
 * Block & Transaction Propagation
 * Build basic P2P communication
