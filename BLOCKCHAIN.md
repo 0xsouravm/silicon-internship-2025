@@ -116,7 +116,7 @@
 * Smart Contracts
 * Cross Chain Communication
 
-### Light Clients & Bridges - **M**
+### Light Clients & Bridges - **S**
 * Header & SPV Verification
 * Bridge Architecture
 * Build basic light client
