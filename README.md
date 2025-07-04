@@ -9,7 +9,7 @@
 Assume your fork is at `https://github.com/your-username/silicon-internship-2025.git` and the main repo is `https://github.com/0xsouravm/silicon-internship-2025.git`.
 
 ---
-
+****
 ## 2. Clone Your Fork
 
 ```bash
@@ -54,11 +54,13 @@ git push origin my-feature-branch
 
 ---
 
-## 7. Create a Pull Request (Terminal Only)
+## 7. Create a Pull Request
 
-You can use the GitHub CLI (`gh`) to create a pull request from the terminal:
+You can create a pull request using either the GitHub CLI or VS Code's GitHub Pull Request extension:
 
-### Install GitHub CLI
+### Option 1: Using GitHub CLI
+
+#### Install GitHub CLI
 
 - **Linux (Debian/Ubuntu):**
   ```bash
@@ -67,11 +69,30 @@ You can use the GitHub CLI (`gh`) to create a pull request from the terminal:
 - **Other methods & troubleshooting:**
   See the official installation guide: [https://github.com/cli/cli#installation](https://github.com/cli/cli#installation)
 
-### Create the Pull Request
+#### Create the Pull Request
 
 ```bash
 gh pr create --base main --head your-username:my-feature-branch --title "PR Title" --body "PR Description"
 ```
+
+### Option 2: Using VS Code
+
+1. Install the "GitHub Pull Requests and Issues" extension in VS Code
+   - Open VS Code
+   - Go to Extensions (Ctrl+Shift+X)
+   - Search for "GitHub Pull Requests and Issues"
+   - Click Install
+
+2. Create a Pull Request
+   - Click on the Source Control icon in the VS Code sidebar (or press Ctrl+Shift+G)
+   - Click on the "..." menu (More Actions)
+   - Select "Create Pull Request"
+   - Follow the prompts to:
+     - Select the base branch (usually main)
+     - Enter a title for your PR
+     - Add a description
+     - Review your changes
+   - Click "Create" to submit your pull request
 
 ---
 

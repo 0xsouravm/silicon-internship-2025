@@ -1,15 +1,16 @@
 use sha2::{Sha256, Digest};
+use std::collections::HashMap;
 
 // fn main() {
 //     let mut my_blockchain = Blockchain::new();
 
 //     my_blockchain.display();
 
-//     my_blockchain.add_blocks("Alice has 100$".to_string());
+//     my_blockchain.add_blocks("Arindam has 100$".to_string());
 //     my_blockchain.display();
-//     my_blockchain.add_blocks("Alice sends 50$ to Bob".to_string());
+//     my_blockchain.add_blocks("Arindam sends 50$ to Yuvi".to_string());
 //     my_blockchain.display();
-//     my_blockchain.add_blocks("Bob sends 20$ to Charlie".to_string());
+//     my_blockchain.add_blocks("Yuvi sends 20$ to Abhilasha".to_string());
     
 
 //     my_blockchain.display();
@@ -18,7 +19,7 @@ use sha2::{Sha256, Digest};
 //     my_blockchain.is_valid();
 
 //     // tampering data
-//     my_blockchain.blocks[2].data = "Alice sends 10$ to Bob".to_string();
+//     my_blockchain.blocks[2].data = "Arindam sends 10$ to Yuvi".to_string();
 
 //     my_blockchain.is_valid();
 // }
@@ -33,15 +34,15 @@ use sha2::{Sha256, Digest};
 /// 
 /// Original chain
 /// 
-/// Block 1: Alice has 100$ (alice: 100$)
-/// Block 2: Alice sends 50$ to Bob(alice: 50$, bob: 50$)
-/// Block 3 : Bob sends 20$ to Charlie(bob: 30$, charlie: 20$)
+/// Block 1: Arindam has 100$ (Arindam: 100$)
+/// Block 2: Arindam sends 50$ to Yuvi(Arindam: 50$, Yuvi: 50$)
+/// Block 3 : Yuvi sends 20$ to Abhilasha(Yuvi: 30$, Abhilasha: 20$)
 /// 
 /// 
 /// if i am trying to change a specific block data block 2
-/// Block 1: Alice has 100$ (alice: 100$)
-/// Block 2: Alice sends 10$ to Bob(alice: 40$, bob: 10$)
-/// Block 3 : Bob sends 20$ to Charlie(bob: 30$, charlie: 20$)
+/// Block 1: Arindam has 100$ (Arindam: 100$)
+/// Block 2: Arindam sends 10$ to Yuvi(Arindam: 40$, Yuvi: 10$)
+/// Block 3 : Yuvi sends 20$ to Abhilasha(Yuvi: 30$, Abhilasha: 20$)
 /// 
 /// 
 /// Domino effect will be:
@@ -65,35 +66,35 @@ use sha2::{Sha256, Digest};
 // Describe a block structure to store block data and create blocks
 pub struct Block{
     pub data: String,
-    pub previous_hash: String,
+    pub prev_hash: String,
     pub hash: String
 }
 
 impl Block{
-    pub fn new(data: String, previous_hash: String) -> Self {
-        // let hash = Self::calculate_hash(&data, &previous_hash);
+    pub fn new(data: String, prev_hash: String) -> Self {
+        // let hash = Self::calc_hash(&data, &prev_hash);
         // Block {
         //     data,
-        //     previous_hash,
+        //     prev_hash,
         //     hash,
         // }
 
         // construct a block
         let mut block = Block {
             data,
-            previous_hash,
+            prev_hash,
             hash: String::new(),
         };
         // update the hash
-        block.hash = block.calculate_hash();
+        block.hash = block.calc_hash();
         // return the block
         block
     }
 
-    pub fn calculate_hash(&self) -> String {
-        let combined = format!("{}{}", self.data, self.previous_hash);
+    pub fn calc_hash(&self) -> String {
+        let combo = format!("{}{}", self.data, self.prev_hash);
         let mut hasher = Sha256::new();
-        hasher.update(combined);
+        hasher.update(combo);
         let result = hasher.finalize();
         format!("{:x}", result)
     }
@@ -135,17 +136,17 @@ impl Blockchain {
     pub fn is_valid (&self) -> bool {
         for i in 1..self.blocks.len() {
             let current = &self.blocks[i];
-            let previous = &self.blocks[i - 1];
+            let prev = &self.blocks[i - 1];
 
             // if my own hash is correct
-            if current.hash  != current.calculate_hash() {
+            if current.hash  != current.calc_hash() {
                 println!("Invalid block at index {}: Hash mismatch", i);
                 return false;
             }
 
-            // i fprev hash is correct
-            if current.previous_hash != previous.hash {
-                println!("Invalid block at index {}: Previous hash mismatch", i);
+            // if prev hash is correct
+            if current.prev_hash != prev.hash {
+                println!("Invalid block at index {}: prev hash mismatch", i);
                 return false;
             }
         }
@@ -159,7 +160,7 @@ impl Blockchain {
             println!("Block {}:", i + 1);
             println!("---------------");
             println!("Hash: {}", block.hash);
-            println!("Previous Hash: {}", block.previous_hash);
+            println!("previous Hash: {}", block.prev_hash);
             println!("Data: {}", block.data);
             println!("===============================");
         }
@@ -229,8 +230,8 @@ fn main() {
     let mut simple_blockchain = Blockchain::new();
     
     // Just add blocks directly (no voting)
-    simple_blockchain.add_blocks("Alice sends $50 to Bob".to_string());
-    simple_blockchain.add_blocks("Bob sends $20 to Charlie".to_string());
+    simple_blockchain.add_blocks("Arindam sends $50 to Yuvi".to_string());
+    simple_blockchain.add_blocks("Yuvi sends $20 to Abhilasha".to_string());
     simple_blockchain.add_blocks("Malicious: Free money for everyone!".to_string());
     
     simple_blockchain.display();
@@ -243,21 +244,21 @@ fn main() {
     
     // Create nodes
     let nodes = vec![
-        Node::new_honest("Alice"),
-        Node::new_honest("Bob"), 
+        Node::new_honest("Arindam"),
+        Node::new_honest("Yuvi"), 
         Node::new_malicious("Mallory"),
     ];
     
-    println!("👥 Nodes: Alice (honest), Bob (honest), Mallory (malicious)");
+    println!("👥 Nodes: Arindam (honest), Yuvi (honest), Mallory (malicious)");
     println!("📐 Need majority: 2 out of 3 votes\n");
     
     let mut consensus_blockchain = Blockchain::new();
     
     // Now we need consensus to add blocks
-    run_consensus(&nodes, &mut consensus_blockchain, "Alice sends $50 to Bob".to_string());
-    run_consensus(&nodes, &mut consensus_blockchain, "Bob sends $20 to Charlie".to_string());
+    run_consensus(&nodes, &mut consensus_blockchain, "Arindam sends $50 to Yuvi".to_string());
+    run_consensus(&nodes, &mut consensus_blockchain, "Yuvi sends $20 to Abhilasha".to_string());
     run_consensus(&nodes, &mut consensus_blockchain, "Malicious: Free money for everyone!".to_string());
-    run_consensus(&nodes, &mut consensus_blockchain, "Charlie sends $10 to Dave".to_string());
+    run_consensus(&nodes, &mut consensus_blockchain, "Abhilasha sends $10 to Dave".to_string());
     
     consensus_blockchain.display();
     
@@ -270,11 +271,47 @@ fn main() {
     println!("✅ Consensus prevents malicious blocks");
     println!("✅ Majority rule defeats minority attackers");
     println!("✅ This is how real blockchains work!");
+    
+    println!("\n\n📖 PART 3: Transaction Processing Demo");
+    println!("======================================");
+    
+    // Create wallet and transaction pool
+    let mut wallet = Wallet::new();
+    let mut tx_pool = TxnPool::new();
+    
+    println!("Initial wallet state:");
+    wallet.display_balances();
+    println!();
+    
+  
+    let tx1 = Transaction::new("Arindam".to_string(), "Yuvi".to_string(), 30, 2);
+    let tx2 = Transaction::new("Yuvi".to_string(), "Abhilasha".to_string(), 15, 1);
+    let tx3 = Transaction::new("Abhilasha".to_string(), "Dave".to_string(), 100, 5); // Should fail
+    
+
+    tx_pool.add_transaction(tx1, &wallet);
+    tx_pool.add_transaction(tx2, &wallet);
+    tx_pool.add_transaction(tx3, &wallet);
+    
+    println!();
+    tx_pool.display_status();
+    
+
+    let best_txns = tx_pool.get_best_transaction(2);
+    println!("\nProcessing {} best transactions:", best_txns.len());
+    
+    for tx in &best_txns {
+        println!("{}", tx.display());
+        wallet.process_transaction(tx);
+    }
+    
+    println!("\nfinalize wallet state:");
+    wallet.display_balances();
 }
 
 
 /// txn processing
-// Inside the blocks taht goes on to the chain 
+// Inside the blocks that goes on to the chain 
 //there are txns and txn processing is how the txn are created , 
 //validated, and processed
 
@@ -307,13 +344,13 @@ fn main() {
 
 /// Transaction Structure
 /// 
-pub struct Transaction {
-    from: String, // sender's address
-    to: String, // recipient's address
-    amount: f64,
-    fee: f64,
-    signature: String,
-}
+// pub struct Transaction {
+//     from: String, // sender's address
+//     to: String, // recipient's address
+//     amount: f64,
+//     fee: f64,
+//     signature: String,
+// }
 
 // 0xyth67hg59vbsjjs
 // what is signing??
@@ -323,16 +360,16 @@ pub struct Transaction {
 
 // 1. Signature check
 // Take txn data
-// take alice pub key
-// validate the signature using alice pub key 
-// if match cotinue else reject
+// take Arindam pub key
+// validate the signature using Arindam pub key 
+// if match continue else reject
 
 
 // example
-//  alice sends 50$ to bob
+//  Arindam sends 50$ to Yuvi
 // signature verification
-// alice pub key is is wrong in the txn
-// alice pubkey is correct but signature validation pass
+// Arindam pub key is is wrong in the txn
+// Arindam pubkey is correct but signature validation pass
 
 // 1. signature verification
 // 2. balance check
@@ -346,7 +383,7 @@ pub struct Transaction {
 // user sends one txn
 // txn is validated by the node 
 // txn is added to the txn pool
-// whever the next block is created it will pick the max number of txn it can
+// whenever the next block is created it will pick the max number of txn it can
 
 
 // every 6 sec we create one block
@@ -372,9 +409,6 @@ pub struct Transaction {
 // add the txn to block
 // confirm the block
 
-
-
-
 #[derive(Debug, Clone)]
 pub struct Transaction{
     pub from: String,
@@ -393,7 +427,7 @@ impl Transaction{
         }
     }
 
-    pub fn  display(&self) {
+    pub fn display(&self) -> String {
         format!("Transaction: {} -> {} | Amount: {} | Fee: {}", 
             self.from, 
             self.to, 
@@ -403,13 +437,13 @@ impl Transaction{
     }
 }
 
-pub struct TransactionPool {
+pub struct TxnPool {
     pub transactions: Vec<Transaction>,
 }
 
-impl TransactionPool{
+impl TxnPool{
     pub fn new() -> Self {
-        TransactionPool {
+        TxnPool {
             transactions: Vec::new(),
         }
     }
@@ -420,36 +454,30 @@ impl TransactionPool{
             println!("Transaction added to pool.");
             true
         } else {
-            println!("Transaction failed: Insufficient balance or sender does not exists");
+            println!("Transaction failed: Insufficient balance or sender does not exist");
             false
         }
         
     }
 
     pub fn get_best_transaction(&mut self, count: usize) -> Vec<Transaction> {
-       self.transactions.sort_by(|a, b| b.fee.cmp(&a.fee));
-       let selected_txns: vec<Transaction> = self.transactions.iter().take(count).cloned();
-       self.transactions = self.transactions.iter().skip(count).cloned().collect();
+        self.transactions.sort_by(|a, b| b.fee.cmp(&a.fee));
+        let selected_txns: Vec<Transaction> = self.transactions.iter().take(count).cloned().collect();
+        self.transactions = self.transactions.iter().skip(count).cloned().collect();
+        selected_txns
     }
 
     pub fn display_status(&self) {
-        println!("transaction pool({} pending txns):", self.transactions.len());
+        println!("Transaction pool({} pending txns):", self.transactions.len());
         for txn in &self.transactions {
             println!("{}", txn.display());
         }
     }
-
 }
-
-
-
-
-use std::collections::HashMap;
 
 pub struct Wallet{
     pub balances: HashMap<String, u64>, 
 }
-
 
 // pub struct Account {
 //     name: String,
@@ -459,9 +487,9 @@ pub struct Wallet{
 impl Wallet { 
     pub fn new() -> Self {
         let mut balances = HashMap::new();
-        balances.insert("Alice".to_string(), 100);
-        balances.insert("Bob".to_string(), 50);
-        balances.insert("Charlie".to_string(), 20);
+        balances.insert("Arindam".to_string(), 100);
+        balances.insert("Yuvi".to_string(), 50);
+        balances.insert("Abhilasha".to_string(), 20);
         Wallet { balances }
     }
 
@@ -477,12 +505,12 @@ impl Wallet {
             *balance -= tx.amount + tx.fee;
         } 
 
-        *self.balances.entry(tx.to.clone()).or_insert(0) += tx.amount
+        *self.balances.entry(tx.to.clone()).or_insert(0) += tx.amount;
 
         // it checks for the key in the hashmap
         // if key exists go to update the value
-        // if key does not exists in that case it will add the key to the hashmap with 
-        // theinitial value provided inside or_insert(0) and then go for update
+        // if key does not exist in that case it will add the key to the hashmap with 
+        // the initial value provided inside or_insert(0) and then go for update
     }
 
     pub fn display_balances(&self) {
@@ -491,5 +519,4 @@ impl Wallet {
             println!("{}: {}$", name, balance);
         }
     }
-
 }
