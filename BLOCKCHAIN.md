@@ -122,7 +122,6 @@
 * Build basic light client
 
 ---
-
 **Legend:**
 - **S** = Taught by Sourav
 - **M** = Taught by Mahavir
