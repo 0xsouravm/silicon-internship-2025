@@ -1,204 +1,29 @@
-use sha2::{Sha256, Digest};
+mod blockchain;
 
-// fn main() {
-//     let mut my_blockchain = Blockchain::new();
+use blockchain::{Blockchain, Transaction, TransactionPool, Node};
 
-//     my_blockchain.display();
+fn run_consensus(nodes: &[Node], blockchain: &mut Blockchain, transaction_pool: &mut TransactionPool) -> bool {
+    if transaction_pool.is_empty() {
+        println!("No transactions to process");
+        return false;
+    }
 
-//     my_blockchain.add_blocks("Alice has 100$".to_string());
-//     my_blockchain.display();
-//     my_blockchain.add_blocks("Alice sends 50$ to Bob".to_string());
-//     my_blockchain.display();
-//     my_blockchain.add_blocks("Bob sends 20$ to Charlie".to_string());
+    // Get transactions from pool (max 3 per block for this example)
+    let transactions = transaction_pool.get_best_transactions(3);
     
-
-//     my_blockchain.display();
-
-
-//     my_blockchain.is_valid();
-
-//     // tampering data
-//     my_blockchain.blocks[2].data = "Alice sends 10$ to Bob".to_string();
-
-//     my_blockchain.is_valid();
-// }
-
-
-/// CORE CHAIN PROPERTIES
-
-/// 1. Immutability
-/// 
-/// Once data is added to block and block is successfully a part
-///  of the chain then the data becomes immutable
-/// 
-/// Original chain
-/// 
-/// Block 1: Alice has 100$ (alice: 100$)
-/// Block 2: Alice sends 50$ to Bob(alice: 50$, bob: 50$)
-/// Block 3 : Bob sends 20$ to Charlie(bob: 30$, charlie: 20$)
-/// 
-/// 
-/// if i am trying to change a specific block data block 2
-/// Block 1: Alice has 100$ (alice: 100$)
-/// Block 2: Alice sends 10$ to Bob(alice: 40$, bob: 10$)
-/// Block 3 : Bob sends 20$ to Charlie(bob: 30$, charlie: 20$)
-/// 
-/// 
-/// Domino effect will be:
-/// Change block 2 -> Hash changed -> Block 3 reference will be invalid 
-/// -> Block 3 wil be invalid -> Block 4 will be invalid
-///  
-/// 
-/// 1 -> 2 -> 3 -> 4 -> 5 node 2
-///  1 -> 2 -> 3 -> 4 -> 5 node 3
-/// 1 -> 2 -> 3 -> 4 -> 5 node 4
-/// 1 -> 2 node 1 (malicious node)
-/// 
-/// 
-/// 2. Cryptographic Hash linking
-/// 
-/// 3. Distributed consent mechanism
-/// 
-
-
-#[derive(Debug, Clone)]
-// Describe a block structure to store block data and create blocks
-pub struct Block{
-    pub data: String,
-    pub previous_hash: String,
-    pub hash: String
-}
-
-impl Block{
-    pub fn new(data: String, previous_hash: String) -> Self {
-        // let hash = Self::calculate_hash(&data, &previous_hash);
-        // Block {
-        //     data,
-        //     previous_hash,
-        //     hash,
-        // }
-
-        // construct a block
-        let mut block = Block {
-            data,
-            previous_hash,
-            hash: String::new(),
-        };
-        // update the hash
-        block.hash = block.calculate_hash();
-        // return the block
-        block
+    if transactions.is_empty() {
+        return false;
     }
 
-    pub fn calculate_hash(&self) -> String {
-        let combined = format!("{}{}", self.data, self.previous_hash);
-        let mut hasher = Sha256::new();
-        hasher.update(combined);
-        let result = hasher.finalize();
-        format!("{:x}", result)
-    }
-}
-
-
-#[derive(Debug, Clone)]
-pub struct Blockchain {
-    pub blocks: Vec<Block>,
-}
-// 1 2 3 4 5
-impl Blockchain {
-    pub fn new() -> Self{
-
-        let mut blockchain = Blockchain {
-            blocks: Vec::new()
-        };
-
-        // add a genesis block
-        let genesis_block = Block::new("First block on the chain".to_string(), "0".to_string());
-        blockchain.blocks.push(genesis_block);
-
-        blockchain
-    }
-
-    pub fn add_blocks(&mut self, data: String) {
-        // old chain state 4 
-        let latest_block_hash = self.blocks.last().unwrap().hash.clone();
-
-        let new_block = Block::new(data, latest_block_hash);
-
-        self.blocks.push(new_block);
-        // 5 block
-
-        println!("Added new block ");
-    }
-
- // 0 1 2 3 4 5 6 7
-    pub fn is_valid (&self) -> bool {
-        for i in 1..self.blocks.len() {
-            let current = &self.blocks[i];
-            let previous = &self.blocks[i - 1];
-
-            // if my own hash is correct
-            if current.hash  != current.calculate_hash() {
-                println!("Invalid block at index {}: Hash mismatch", i);
-                return false;
-            }
-
-            // i fprev hash is correct
-            if current.previous_hash != previous.hash {
-                println!("Invalid block at index {}: Previous hash mismatch", i);
-                return false;
-            }
-        }
-        println!("Blockchain is valid");
-        true
-    }
-
-    pub fn display(&self) {
-        println!("Blockchain:");
-        for (i, block) in self.blocks.iter().enumerate() {
-            println!("Block {}:", i + 1);
-            println!("---------------");
-            println!("Hash: {}", block.hash);
-            println!("Previous Hash: {}", block.previous_hash);
-            println!("Data: {}", block.data);
-            println!("===============================");
-        }
-    }
-}
-
-#[derive(Debug)]
-pub struct Node {
-    pub name: String,
-    pub is_malicious: bool,
-}
-
-impl Node {
-    pub fn new_honest(name: &str) -> Self {
-        Node { name: name.to_string(), is_malicious: false }
+    println!("Consensus voting on block with {} transactions:", transactions.len());
+    for tx in &transactions {
+        println!("  - {}", tx.display());
     }
     
-    pub fn new_malicious(name: &str) -> Self {
-        Node { name: name.to_string(), is_malicious: true }
-    }
-    
-    pub fn vote(&self, proposal: &str) -> bool {
-        let approve = if self.is_malicious { false } else { true };
-        println!("🗳️  {} votes {} on '{}'", 
-            self.name, 
-            if approve { "YES" } else { "NO" }, 
-            proposal
-        );
-        approve
-    }
-}
-
-fn run_consensus(nodes: &[Node], blockchain: &mut Blockchain, proposal: String) {
-    println!("📝 Proposal: '{}'", proposal);
-    
-    // Everyone votes
+    // Voting process
     let mut yes_votes = 0;
     for node in nodes {
-        if node.vote(&proposal) {
+        if node.vote(&transactions) {
             yes_votes += 1;
         }
     }
@@ -206,290 +31,165 @@ fn run_consensus(nodes: &[Node], blockchain: &mut Blockchain, proposal: String) 
     let total_votes = nodes.len();
     let majority_needed = (total_votes / 2) + 1;
     
-    println!("📊 Results: {} YES out of {} votes", yes_votes, total_votes);
+    println!("Results: {} YES out of {} votes (need {})", yes_votes, total_votes, majority_needed);
     
-    // Check if majority
+    // Check if majority approved
     if yes_votes >= majority_needed {
-        println!("✅ ACCEPTED! Adding to blockchain");
-        blockchain.add_blocks(proposal);
+        println!("ACCEPTED! Adding block to blockchain");
+        blockchain.add_block(transactions);
+        true
     } else {
-        println!("❌ REJECTED! Not adding to blockchain");
+        println!("REJECTED! Block not added");
+        // Return transactions to pool
+        for tx in transactions {
+            transaction_pool.transactions.push(tx);
+        }
+        false
     }
-    println!();
 }
 
-fn main() {
-    println!("🚀 Simple Blockchain vs Consensus Blockchain");
-    println!("============================================\n");
-    
-    
-    println!("📖 PART 1: Simple Blockchain (like yesterday)");
-    println!("----------------------------------------------");
+fn demonstrate_simple_blockchain() {
+    println!("PART 1: Simple Blockchain Without Consensus");
+    println!("===========================================");
     
     let mut simple_blockchain = Blockchain::new();
     
-    // Just add blocks directly (no voting)
-    simple_blockchain.add_blocks("Alice sends $50 to Bob".to_string());
-    simple_blockchain.add_blocks("Bob sends $20 to Charlie".to_string());
-    simple_blockchain.add_blocks("Malicious: Free money for everyone!".to_string());
+    // Create some transactions
+    let tx1 = Transaction::new("Alice".to_string(), "Bob".to_string(), 30, 1);
+    let tx2 = Transaction::new("Bob".to_string(), "Charlie".to_string(), 15, 1);
+    let tx3 = Transaction::new("Alice".to_string(), "Dave".to_string(), 999, 1); // This should fail
+    
+    println!("Adding transactions directly (no validation):");
+    
+    // Add blocks directly without validation (old way)
+    simple_blockchain.add_block(vec![tx1]);
+    simple_blockchain.add_block(vec![tx2]);
+    simple_blockchain.add_block(vec![tx3]); // This will fail validation
     
     simple_blockchain.display();
     
-    println!("⚠️  Problem: Anyone can add anything! No security!\n");
+    println!("Problem: Invalid transactions can be rejected, but there's no consensus mechanism");
+    println!();
+}
+
+fn demonstrate_consensus_blockchain() {
+    println!("PART 2: Consensus Blockchain with Transaction Pool");
+    println!("================================================");
     
+    let mut consensus_blockchain = Blockchain::new();
+    let mut transaction_pool = TransactionPool::new();
     
-    println!("📖 PART 2: Consensus Blockchain (today's improvement)");
-    println!("-----------------------------------------------------");
-    
-    // Create nodes
+    // Create nodes for consensus
     let nodes = vec![
         Node::new_honest("Alice"),
         Node::new_honest("Bob"), 
         Node::new_malicious("Mallory"),
+        Node::new_honest("Charlie"),
     ];
     
-    println!("👥 Nodes: Alice (honest), Bob (honest), Mallory (malicious)");
-    println!("📐 Need majority: 2 out of 3 votes\n");
+    println!("Network nodes: Alice (honest), Bob (honest), Mallory (malicious), Charlie (honest)");
+    println!("Majority needed: 3 out of 4 votes");
+    println!();
     
-    let mut consensus_blockchain = Blockchain::new();
+    consensus_blockchain.wallet.display_balances();
     
-    // Now we need consensus to add blocks
-    run_consensus(&nodes, &mut consensus_blockchain, "Alice sends $50 to Bob".to_string());
-    run_consensus(&nodes, &mut consensus_blockchain, "Bob sends $20 to Charlie".to_string());
-    run_consensus(&nodes, &mut consensus_blockchain, "Malicious: Free money for everyone!".to_string());
-    run_consensus(&nodes, &mut consensus_blockchain, "Charlie sends $10 to Dave".to_string());
+    // Create and add transactions to pool
+    println!("Adding transactions to pool:");
     
-    consensus_blockchain.display();
+    let transactions = vec![
+        Transaction::new("Alice".to_string(), "Bob".to_string(), 25, 2),
+        Transaction::new("Bob".to_string(), "Charlie".to_string(), 10, 1),
+        Transaction::new("Charlie".to_string(), "Dave".to_string(), 5, 1),
+        Transaction::new("Alice".to_string(), "Dave".to_string(), 15, 3), // Higher fee
+        Transaction::new("Bob".to_string(), "Alice".to_string(), 8, 1),
+        Transaction::new("Dave".to_string(), "Bob".to_string(), 3, 1),
+    ];
     
-    
-    println!("🔍 COMPARISON:");
-    println!("Simple Blockchain:    {} blocks (including malicious)", simple_blockchain.blocks.len());
-    println!("Consensus Blockchain: {} blocks (malicious blocked!)", consensus_blockchain.blocks.len());
-    
-    println!("\n🎓 LESSON:");
-    println!("✅ Consensus prevents malicious blocks");
-    println!("✅ Majority rule defeats minority attackers");
-    println!("✅ This is how real blockchains work!");
-}
-
-
-/// txn processing
-// Inside the blocks taht goes on to the chain 
-//there are txns and txn processing is how the txn are created , 
-//validated, and processed
-
-
-// What is a transaction??
-
-// In real world it is change of balance or assets 
-// in blockchain anything that happens goes as a txn to the chain
-
-/// Bank check
-
-// pay to: Person
-// amount: $100
-// from: You
-// signature: Your signature
-// date: 2023-10-01
-
-/// Blockchain txn
-
-// To: Person(public key)
-// Amount : $100
-// From: you (public key)
-// fee: $1
-// signature: Your signature
-
-// Gas fee 
-// just like tax on blockchain you have to pay txn fee for every txn you do
-// and this fee varies from platform to platform
-
-
-/// Transaction Structure
-/// 
-pub struct Transaction {
-    from: String, // sender's address
-    to: String, // recipient's address
-    amount: f64,
-    fee: f64,
-    signature: String,
-}
-
-// 0xyth67hg59vbsjjs
-// what is signing??
-//  uueh488209jk33vz
-
-// Transaction Validation
-
-// 1. Signature check
-// Take txn data
-// take alice pub key
-// validate the signature using alice pub key 
-// if match cotinue else reject
-
-
-// example
-//  alice sends 50$ to bob
-// signature verification
-// alice pub key is is wrong in the txn
-// alice pubkey is correct but signature validation pass
-
-// 1. signature verification
-// 2. balance check
-// 3. Double spending check
-// 4. format check
-
-// new txn -> check signature -> check balance -> double spend check -> format check -> accept to txn pool
-
-
-// txn pool is the waiting area of txns
-// user sends one txn
-// txn is validated by the node 
-// txn is added to the txn pool
-// whever the next block is created it will pick the max number of txn it can
-
-
-// every 6 sec we create one block
-// at the beginning of 6 sec there is one block created 
-// it will wait 2/3rd of time for txn pool
-// 1/3of time it will take to validate and finalize the block
-
-
-// Transaction Fee
-
-// Gas fee  = (fee rate * txn size)
-
-// Txn lifecycle
-
-// create the txn
-// broadcast the txn
-// validate the sender pub key
-// validate the signature
-// validate the balance
-// validate double spending
-// format check
-// add to txn pool
-// add the txn to block
-// confirm the block
-
-
-
-
-#[derive(Debug, Clone)]
-pub struct Transaction{
-    pub from: String,
-    pub to: String,
-    pub amount: u64,
-    pub fee: u64,
-}
-
-impl Transaction{
-    pub fn new(from: String, to: String, amount: u64, fee: u64) -> Self {
-        Transaction {
-            from,
-            to,
-            amount,
-            fee,
-        }
+    for tx in transactions {
+        transaction_pool.add_transaction(tx, &consensus_blockchain.wallet);
     }
-
-    pub fn  display(&self) {
-        format!("Transaction: {} -> {} | Amount: {} | Fee: {}", 
-            self.from, 
-            self.to, 
-            self.amount, 
-            self.fee
-        )
-    }
-}
-
-pub struct TransactionPool {
-    pub transactions: Vec<Transaction>,
-}
-
-impl TransactionPool{
-    pub fn new() -> Self {
-        TransactionPool {
-            transactions: Vec::new(),
-        }
-    }
-
-    pub fn add_transaction(&mut self, transaction: Transaction, balances: &Wallet) -> bool {
-        if balances.has_balance(&transaction.from, transaction.amount, transaction.fee) {
-            self.transactions.push(transaction);
-            println!("Transaction added to pool.");
-            true
-        } else {
-            println!("Transaction failed: Insufficient balance or sender does not exists");
-            false
+    
+    transaction_pool.display_status();
+    
+    // Process blocks with consensus
+    println!("Processing blocks with consensus:");
+    println!("=================================");
+    
+    let mut block_count = 1;
+    while !transaction_pool.is_empty() && block_count <= 3 {
+        println!("Block {} consensus:", block_count);
+        println!("-----------------");
+        
+        let success = run_consensus(&nodes, &mut consensus_blockchain, &mut transaction_pool);
+        
+        if success {
+            block_count += 1;
         }
         
-    }
-
-    pub fn get_best_transaction(&mut self, count: usize) -> Vec<Transaction> {
-       self.transactions.sort_by(|a, b| b.fee.cmp(&a.fee));
-       let selected_txns: vec<Transaction> = self.transactions.iter().take(count).cloned();
-       self.transactions = self.transactions.iter().skip(count).cloned().collect();
-    }
-
-    pub fn display_status(&self) {
-        println!("transaction pool({} pending txns):", self.transactions.len());
-        for txn in &self.transactions {
-            println!("{}", txn.display());
+        println!();
+        
+        if !transaction_pool.is_empty() {
+            transaction_pool.display_status();
         }
     }
-
+    
+    // Final blockchain state
+    consensus_blockchain.display();
+    
+    // Validate blockchain integrity
+    println!("Blockchain Validation:");
+    println!("====================");
+    consensus_blockchain.is_valid();
 }
 
-
-
-
-use std::collections::HashMap;
-
-pub struct Wallet{
-    pub balances: HashMap<String, u64>, 
+fn demonstrate_malicious_scenario() {
+    println!("PART 3: Malicious Scenario Demonstration");
+    println!("========================================");
+    
+    let mut blockchain = Blockchain::new();
+    let mut transaction_pool = TransactionPool::new();
+    
+    // Create a network with majority malicious nodes
+    let malicious_nodes = vec![
+        Node::new_malicious("Evil1"),
+        Node::new_malicious("Evil2"),
+        Node::new_malicious("Evil3"),
+        Node::new_honest("Alice"),
+    ];
+    
+    println!("Network with majority malicious nodes: Evil1, Evil2, Evil3 (malicious), Alice (honest)");
+    println!("This demonstrates how malicious majority can reject valid transactions");
+    println!();
+    
+    // Add a valid transaction
+    let valid_tx = Transaction::new("Alice".to_string(), "Bob".to_string(), 10, 1);
+    transaction_pool.add_transaction(valid_tx, &blockchain.wallet);
+    
+    transaction_pool.display_status();
+    
+    println!("Attempting consensus with malicious majority:");
+    run_consensus(&malicious_nodes, &mut blockchain, &mut transaction_pool);
+    
+    println!("Result: Even valid transactions can be rejected by malicious majority");
+    println!("Solution: Ensure honest majority in the network");
 }
 
-
-// pub struct Account {
-//     name: String,
-//     balance: u64,
-// }
-
-impl Wallet { 
-    pub fn new() -> Self {
-        let mut balances = HashMap::new();
-        balances.insert("Alice".to_string(), 100);
-        balances.insert("Bob".to_string(), 50);
-        balances.insert("Charlie".to_string(), 20);
-        Wallet { balances }
-    }
-
-    pub fn has_balance(&self, name: &str, amount: u64, fee: u64) -> bool {
-        if let Some(balance) = self.balances.get(name) {
-            return *balance >= amount + fee;
-        }
-        false
-    }
-
-    pub fn process_transaction(&mut self, tx: &Transaction) {
-        if let Some(balance) = self.balances.get_mut(&tx.from) {
-            *balance -= tx.amount + tx.fee;
-        } 
-
-        *self.balances.entry(tx.to.clone()).or_insert(0) += tx.amount
-
-        // it checks for the key in the hashmap
-        // if key exists go to update the value
-        // if key does not exists in that case it will add the key to the hashmap with 
-        // theinitial value provided inside or_insert(0) and then go for update
-    }
-
-    pub fn display_balances(&self) {
-        println!("Wallet Balances:");
-        for (name, balance) in &self.balances {
-            println!("{}: {}$", name, balance);
-        }
-    }
-
+fn main() {
+    println!("Blockchain with Transaction Pool and Consensus Demo");
+    println!("==================================================");
+    println!();
+    
+    demonstrate_simple_blockchain();
+    demonstrate_consensus_blockchain();
+    demonstrate_malicious_scenario();
+    
+    println!();
+    println!("KEY CONCEPTS DEMONSTRATED:");
+    println!("=========================");
+    println!("1. Transaction validation before adding to pool");
+    println!("2. Fee-based transaction prioritization");
+    println!("3. Consensus mechanism for block approval");
+    println!("4. Wallet balance tracking and updates");
+    println!("5. Protection against malicious transactions");
+    println!("6. Blockchain integrity validation");
 }
