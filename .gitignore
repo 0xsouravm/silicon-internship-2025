@@ -1,3 +1,4 @@
 */target
 blockchain/xor-encryption/target/*
 blockchain/merkle-tree/target/*
+blockchain/basic-blockchain/target/*
