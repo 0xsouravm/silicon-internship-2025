@@ -493,3 +493,106 @@ impl Wallet {
     }
 
 }
+
+
+
+
+// Blockchain state and storage models
+
+
+// blockchain with rust class
+// day 1 : Yuvraj: 10
+//         Manish: 10
+//         Arindam: 5
+//         Remaining_all: 1
+
+// total token = 47
+
+// day 2 : Yuvraj: 8(10-2)
+//         Manish: 12 (10+2)
+//         rest fixed
+
+// total token = 47
+
+// state: current token balance. txns move token around but never create or destroy them
+
+// 100th block is added
+// alice: 10 BTC
+// bob: 5 BTC
+// charlie: 3 BTC
+
+// 101 th block added
+// alice : 8 BTC( 10 -2)
+// bob: 7 BTC(5 +2)
+// charlie: 3 BTC (no change)
+
+
+
+// Traffic right
+// Red -> orange -> green -> Orange -> Red
+
+// red -> orange -> green -> red
+
+// alice 10 BTC
+//  bob: 5btc
+
+// alice wants to send 2 btc to bob
+
+// alice 8
+//  bob 7
+
+// UTXO MODEL and Account Model
+
+
+// UTXO model
+// Unspent Transaction Output Model
+
+// Manish Wallet
+// 10
+// 5
+// 1
+
+
+// 10
+// 5
+// 1
+
+//  manish wants alooparatha 10 + 5
+// chai 5
+// coffee 7(5 + 1 + 1)
+
+
+// alice
+//  3 BTC (mining reward)
+//  2 BTC (bob sent me)
+//  1 BTC (charlie sent me)
+
+// total : i need to add up the bills and show up: 6 BTC
+
+// alice wants to send 4 btc to dave
+// send = 3 BTC + 2 BTC
+// dave returns = 1 BTC
+
+// alice
+//  3 BTC (mining reward)
+//  2 BTC (bob sent me)
+//  1 BTC (charlie sent me)
+// 3 BTC( sent to dave)
+// 2 BTC (sent to dave)
+//1 BTC (returned to alice)
+
+// total : 2 BTC
+
+
+// Account Based Model
+
+//  normal bank account
+// alice balance: 100
+// sends 40 to dave:
+// alice balance: 60
+
+
+// ethereum uses account based model
+
+// yuvraj: 100 eth
+// manish: 50 eth
