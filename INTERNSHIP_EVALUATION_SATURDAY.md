@@ -2,7 +2,7 @@
 
 | Sl No. | SIC No | Student Name | Branch Code | Official Mail ID | Students Contact No | Semester Code | Course Name | Time |
 |--------|--------|--------------|-------------|------------------|---------------------|---------------|-------------|------|
-| 1  | 23BCEE42 | MANISH KUMAR JHA | CE | cen.23bcee42@silicon.ac.in | 6371750590 | 4 | Blockchain With Rust | 12:00 - 12:30 |
+| 1  | 23BECE48 | ARINDAM PANIGRAHI | ECE | ece.23bece48@silicon.ac.in | 8895675250 | 4 | Blockchain With Rust | 12:00 - 12:30 |
 | 2  | 23BCED80 | AYUSH KUMAR SAHOO | CE | cen.23bced80@silicon.ac.in | 9777910319 | 4 | Blockchain With Rust | 12:30 - 1:00 |
 | 3  | 23BCEB93 | BISHWAJIT PANIGRAHI | CE | ce.23bceb93@silicon.ac.in | 7008078995 | 4 | Blockchain With Rust | 1:00 - 1:30 |
 | 4  | 23BCEA51 | NAMBALA KARTEEK | CE | cen.23bcea51@silicon.ac.in | 7735463514 | 4 | Blockchain With Rust | 1:30 - 2:00 |
