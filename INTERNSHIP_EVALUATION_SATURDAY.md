@@ -13,5 +13,5 @@
 | 9  | 23BCEF11 | YUVRAJ BISWAL | CE | cen.23bcef11@silicon.ac.in | 9348220494 | 4 | Blockchain With Rust | 5:30 - 6:00 |
 | 10 | 23BCEB93 | BISHWAJIT PANIGRAHI | CE | ce.23bceb93@silicon.ac.in | 7008078995 | 4 | Blockchain With Rust | 6:00 - 6:30 |
 | 11 | 23BCSB77 | MOHIT KUMAR SATPATHY | CSE | cse.23bcsb77@silicon.ac.in | 6372993167 | 4 | Blockchain With Rust | 6:30 - 7:00 |
-| 12 | 23BCSB56 | PANKAJ AGRAWAL | CSE | cse.23bcsb56@silicon.ac.in | 7381271461 | 4 | Blockchain With Rust | 12:00 - 12:30 |
-| 13 | 23BCSF80 | RAMUDU VEERENDRA | CSE | cse.23bcsf80@silicon.ac.in | 7847051368 | 4 | Blockchain With Rust | 12:30 - 1:00 |
+| 12 | 23BCSB56 | PANKAJ AGRAWAL | CSE | cse.23bcsb56@silicon.ac.in | 7381271461 | 4 | Blockchain With Rust | 7:00 - 7:30 |
+| 13 | 23BCSF80 | RAMUDU VEERENDRA | CSE | cse.23bcsf80@silicon.ac.in | 7847051368 | 4 | Blockchain With Rust | 7:30 - 8:00 |
