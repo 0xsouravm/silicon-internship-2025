@@ -3,6 +3,8 @@
 
 Date: 14th July 2025
 
+By: Sumeet
+
 | No. | SIC        | Name                     | Time (in PM)   |
 |-----|------------|--------------------------|----------------|
 | 1   | 24BCSG09   | ARYA SAHANA              | 12:00 - 12:30  |
@@ -16,6 +18,19 @@ Date: 14th July 2025
 | 9   | 24BCSJ25   | SOUMYA RANJAN BHUYAN     | 5:30 - 6:00    |
 | 10  | 24BCSA68   | SUBHA ASHISH SETHI       | 6:00 - 6:30    |
 | 11  | 24BCSE68   | SANKET SUMAN BASTIA      | 6:30 - 7:00    |
+
+
+
+By: Mahavir
+
+
+| No.  | SIC        | Name                     | Time Slot |
+|------|------------|--------------------------|-----------|
+| 1    | 24BECC16   | ADARSH SUBHADARSHI SAHOO | 7-7.30    |
+| 2    | 24BECF64   | ROHIT GUPTA              | 7.30-8    |
+| 3    | 24BECG16   | SAMBIT KUMAR             | 8-8.30    |
+| 4    | 23BCSC64   | ADARSH RAJ               | 8.30-9    |
+| 5    | 23BCSD98   | BIKASH KUMAR GIRI        | 9-9.30    |
 
 
 ## Evaluation Day 2
@@ -32,15 +47,9 @@ Date: 15th July 2025
 | 5   | 24BCSE60   | SASWATI MISHRA           | 6:00 - 6:30    |
 
 
-## To Be Scheduled
-==================
+
 | No.  | SIC        | Name                     | Time Slot |
 |------|------------|--------------------------|-----------|
-| 1    | 24BECC16   | ADARSH SUBHADARSHI SAHOO | -         |
-| 2    | 24BECF64   | ROHIT GUPTA              | -         |
-| 3    | 24BECG16   | SAMBIT KUMAR             | -         |
-| 4    | 23BCSC64   | ADARSH RAJ               | -         |
-| 5    | 23BCSD98   | BIKASH KUMAR GIRI        | -         |
 | 6    | 23BCSC50   | KUMAR PRIYANSHU          | -         |
 | 7    | 23BCTA28   | ABHILASH PRAHARAJ        | -         |
 | 8    | 23BECC95   | RANIT DAS                | -         |
