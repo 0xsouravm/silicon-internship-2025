@@ -7,13 +7,13 @@ Date: 14th July 2025
 
 | No. | SIC        | Name                     | Time (in PM)   |
 |-----|------------|--------------------------|----------------|
-| 1   | 24BCSA13   | GAYATRI PATI             | 1:00 - 1:30    |
-| 2   | 24BCSF37   | HAREKRUSHNA MOHANTY      | 1:30 - 2:00    |
-| 3   | 24BCSG85   | KUNDAN KUMAR             | 3:00 - 3:30    |
+~~| 1   | 24BCSA13   | GAYATRI PATI             | 1:00 - 1:30    |~~
+~~| 2   | 24BCSF37   | HAREKRUSHNA MOHANTY      | 1:30 - 2:00    |~~
+~~| 3   | 24BCSG85   | KUNDAN KUMAR             | 3:00 - 3:30    |~~
 | 4   | 23BCSG95   | MANISH PRIYADARSHI JENA  | 3:30 - 4:00    |
 | 5   | 24BCSJ25   | SOUMYA RANJAN BHUYAN     | 5:00 - 5:30    |
-| 6   | 24BCSA68   | SUBHA ASHISH SETHI       | 5:30 - 6:00    |
-| 7   | 24BCSE68   | SANKET SUMAN BASTIA      | 6:00 - 6:30    |
+~~| 6   | 24BCSA68   | SUBHA ASHISH SETHI       | 5:30 - 6:00    |~~
+~~| 7   | 24BCSE68   | SANKET SUMAN BASTIA      | 6:00 - 6:30    |~~
 
 
 - By: Mahavir
