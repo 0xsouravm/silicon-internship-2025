@@ -47,9 +47,9 @@ Date: 15th July 2025
 
 | No.  | SIC        | Name                     | Time Slot |
 |------|------------|--------------------------|-----------|
-| 1    | 23BCSC50   | KUMAR PRIYANSHU          | -         |
-| 2    | 23BCTA28   | ABHILASH PRAHARAJ        | -         |
-| 3    | 23BECC95   | RANIT DAS                | -         |
+| 1    | 23BCSC50   | KUMAR PRIYANSHU          | 7 - 7.30  |
+| 2    | 23BCTA28   | ABHILASH PRAHARAJ        | 7.30 - 8  |
+| 3    | 23BECC95   | RANIT DAS                | 8 - 8.30  |
 
 ## Evaluation Day 3
 ==================
